@@ -134,7 +134,7 @@ return [
     |
     */
 
-    'providers' => [ Jenssegers\Mongodb\MongodbServiceProvider::class,
+    'providers' => [
 
         /*
          * Laravel Framework Service Providers...

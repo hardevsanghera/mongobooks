@@ -1,89 +1,46 @@
 @extends('books.layout')
 
 @section('content')
-   <div class="container">
-        <div class="col-sm-offset-2 col-sm-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    New Task
-                </div>
-
-                <div class="panel-body">
-                    <!-- New Task Form -->
-		    <form action="{{ route('books.store') }}"  method="POST">
-                        @csrf
-                        <!-- Task Name -->
-                        <div class="form-group">
-
-                            <div class="col-sm-6">
-                                <input type="text" name="name" class="form-control" placeholder="Task details" value="">
-                            </div>
-                        </div>
-
-                        <!-- Add Task Button -->
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-6">
-                                <button type="submit" class="btn btn-default">
-                                    <i class="fa fa-btn fa-plus"></i>Add Task
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>  
-<!--
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>Task Manager by Nutanix Calm</h2>
+                <h2>Books</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('books.create') }}">+Add Task</a>
+                <a class="btn btn-success" href="{{ route('books.create') }}"> Create New Book</a>
             </div>
         </div>
     </div>
--->
-   
+
     @if ($message = Session::get('success'))
         <div class="alert alert-success">
             <p>{{ $message }}</p>
         </div>
     @endif
 
-<!-- Current Tasks -->
-            @if (count($books) > 0)
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Current Tasks
-                    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Details</th>
+            <th width="280px">Action</th>
+        </tr>
+	    @foreach ($books as $book)
+	    <tr>
+	        <td>{{ ++$i }}</td>
+	        <td>{{ $book->name }}</td>
+	        <td>{{ $book->detail }}</td>
+	        <td>
+                <form action="{{ route('books.destroy',$book->id) }}" method="POST">
+                    <a class="btn btn-info" href="{{ route('books.show',$book->id) }}">Show</a>
+                    <a class="btn btn-primary" href="{{ route('books.edit',$book->id) }}">Edit</a>
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+	        </td>
+	    </tr>
+	    @endforeach
+    </table>
 
-                    <div class="panel-body">
-                        <table class="table table-striped task-table">
-                            <thead>
-                                <th>Task</th>
-                                <th>&nbsp;</th>
-                            </thead>
-                            <tbody>
-                                @foreach ($books as $book)
-                                    <tr>
-                                        <td class="table-text"><div>{{ $book->name }}</div></td>
-
-                                        <!-- Task Delete Button -->
-                                        <td>
-                                            <form action="{{ route('books.destroy',$book->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="fa fa-btn fa-trash"></i>Delete
-                                                </button
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endif
 @endsection
